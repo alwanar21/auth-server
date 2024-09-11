@@ -1,0 +1,31 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  email           String   @id @db.VarChar(100)
+  password        String   @db.VarChar(100)
+  isActive        Boolean  @default(false)
+  profile Profile?
+
+  @@map("users")
+}
+
+model Profile {
+  username   String   @id @db.VarChar(100)
+  firstName  String?   @db.VarChar(50)
+  lastName   String?   @db.VarChar(50)
+  photo      String?   @db.VarChar(50)
+  birthDate  DateTime?
+  user   User @relation(fields: [email], references: [email])
+  email String  @unique
+
+  @@map("profiles")
+}
